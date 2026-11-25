@@ -1,0 +1,248 @@
+&time_control
+ run_hours                           = 0,
+ start_year                          = _START_YY_,                   ! four digit year of starting time
+ start_month                         = _START_MM_,                   ! two digit month of starting time
+ start_day                           = _START_DD_,                   ! two digit day of starting time
+ start_hour                          = _START_HH_,                   ! two digit hour of starting time
+ start_minute                        = 00,                           ! two digit minute of starting time
+ start_second                        = 00,                           ! two digit second of starting time
+ end_year                            = _END_YY_,                     ! four digit year of ending time
+ end_month                           = _END_MM_,                     ! two digit month of ending time
+ end_day                             = _END_DD_,                     ! two digit day of ending time
+ end_hour                            = _END_HH_,                     ! two digit hour of ending time
+ end_minute                          = 00,                           ! two digit minute of ending time
+ end_second                          = 00,                           ! two digit second of ending time
+ interval_seconds                    = 21600,                        ! time interval between incoming real data (in seconds); 6h*60min*60s=21600s
+ input_from_file                     = .true.,                       ! whether nested run has input files
+ fine_input_stream                   = 0,                            ! field selection from nested file; 0: all fields are used
+ history_interval                    = 60,                           ! history output file interval (in minutes)
+ frames_per_outfile                  = 1,                            ! number of output times per history file
+ restart                             = _RESTART_TF_,                 ! whether this run is a restart
+ restart_interval                    = _RESTART_I_,                  ! restart output interval (in minutes); n_days*24h*60min
+ override_restart_timers             = .true.,                       ! whether to change the alarms from what is previously set
+ write_hist_at_0h_rst                = .true.,                       ! whether to output history file at the start of restart run
+ io_form_history                     = 2,                            ! netCDF format for history files
+ io_form_restart                     = 2,                            ! netCDF format for restart files
+ io_form_input                       = 2,                            ! netCDF format for input files
+ io_form_boundary                    = 2,                            ! netCDF format for boundary files
+ debug_level                         = 0,                            ! debug message level
+ diag_print                          = 0,                            ! print out time series of model diagnostics; 0: no print
+!! --- AUXILIARY INPUTS (auxinput[2-24]) ---
+! -> One-way Nested Run Using ndown
+ io_form_auxinput2                   = 2,                            ! netCDF format
+! -> SST updating (used only with sst_update=1)
+ auxinput4_inname                    = "wrflowinp_d<domain>",        ! filename for SST updating
+ auxinput4_interval                  = 360,                          ! time interval for SST updating matching interval_seconds (in minutes); 6h*60min=360min
+ io_form_auxinput4                   = 2,                            ! netCDF format
+! -> Radiation options: Aerosols
+ auxinput15_inname                   = _AOD_,                        ! filename for aerosol input data (LUCAS FPS)
+ auxinput15_interval                 = 1440,                         ! time interval for aerosol input (in minutes); 24h*60min=1440min
+ io_form_auxinput15                  = 2,                            ! netCDF format
+!! --- AUXILIARY OUTPUTS (auxhist[1-24]) ---
+! -> Additional regional climate surface fields (WRFxtrm)
+ output_diagnostics                  = 1,                            ! write extreme values (Tmax, Tmin, etc.) to auxhist3
+ auxhist3_outname                    = "wrfxtrm_d<domain>_<date>",   ! filename for extreme values
+ auxhist3_interval                   = 1440,                         ! output interval (in minutes); 24h*60min=1440min
+ io_form_auxhist3                    = 2,                            ! netCDF format
+ frames_per_auxhist3                 = _DAYS_XTR_,                   ! number of output times per auxhist3 file
+! -> CORDEX-WRF
+! auxhist9_outname                   = "wrfcdx_d<domain>_<date>",    ! filename for CORDEX-specific output
+! auxhist9_interval                  = 60,                           ! output interval (in minutes); 1h*60min=60min
+! io_form_auxhist9                   = 2,                            ! netCDF format
+! frames_per_auxhist9                = 24,                           ! number of output times per auxhist9 file
+! -> Soil initialisation
+! auxhist14_outname                  = "wrfhrly_d<domain>_<date>",   ! filename for hourly soil/surface output
+! auxhist14_interval                 = 60,                           ! output interval (in minutes); 1h*60min=60min
+! io_form_auxhist14                  = 2,                            ! netCDF format
+! frames_per_auxhist14               = 1,                            ! number of output times per auxhist14 file
+! -> Pressure level diagnostic output
+! auxhist23_outname                  = "wrfpress_d<domain>_<date>",  ! filename for pressure-level diagnostics
+! auxhist23_interval                 = 60,                           ! output interval (in minutes); 1h*60min=60min
+! io_form_auxhist23                  = 2,                            ! netCDF format
+! frames_per_auxhist23               = 24,                           ! number of output times per auxhist23 file
+!! --- RUN-TIME I/O OPTIONS ---
+ iofields_filename                   = "_OUTFIELDS_",                ! file with list of variables to include/exclude
+ nocolons                            = _NOCOLONS_,                   ! write the output files with _ instead of : (cannot be used with real.exe)
+/
+
+&domains
+ time_step                           = 60,          ! main time step in seconds
+ time_step_fract_num                 = 0,           ! numerator for fractional time step
+ time_step_fract_den                 = 1,           ! denominator for fractional time step
+ max_dom                             = 1,           ! number of domains
+ s_we                                = 1,           ! start index in x (west-east)
+ e_we                                = 445,         ! end index in x (west-east)
+ s_sn                                = 1,           ! start index in y (south-north)
+ e_sn                                = 433,         ! end index in y (south-north)
+ s_vert                              = 1,           ! start index in z (vertical)
+ e_vert                              = 54,          ! end index in z (vertical)
+ p_top_requested                     = 2000.,       ! p_top (Pa) to use; top of atmosphere is at 20 hPa
+ dx                                  = 12229.52,    ! grid spacing in x (in meters)
+ dy                                  = 12229.52,    ! grid spacing in y (in meters)
+ grid_id                             = 1,           ! domain identifier
+ parent_id                           = 0,           ! id of the parent domain
+ i_parent_start                      = 1,           ! x starting index in parent
+ j_parent_start                      = 1,           ! y starting index in parent
+ parent_grid_ratio                   = 1,           ! parent-to-nest grid ratio
+ parent_time_step_ratio              = 1,           ! parent-to-nest time step ratio
+ feedback                            = 0,           ! 0: no feedback (nest to parent)
+ smooth_option                       = 0,           ! 0: no smoothing (nest to parent)
+ num_metgrid_levels                  = 26,          ! number of vertical levels of 3d meteorological fields input
+ num_metgrid_soil_levels             = 4,           ! number of vertical soil levels or layers input
+ auto_levels_opt                     = 2,           ! automatic level generation; (also set dzstretch_s, dzstretch_u, dzbot, max_dz)
+ dzstretch_s                         = 1.20,        ! surface stretch factor for auto_levels_opt=2
+ dzstretch_u                         = 1.04,        ! upper stretch factor for auto_levels_opt=2
+ max_dz                              = 1000,        ! maximum level thickness allowed (m) for auto_levels_opt=2
+ dzbot                               = 35,          ! thickness of lowest layer (m) for auto_levels_opt=2; lowest model level at 35m
+ sfcp_to_sfcp                        = .true.,      ! compute surface pressure from pressure-level input
+/
+
+!&cordex
+! These settings produce all core variables and all but the three lightning-related Tier-1 variables
+! output_cordex                      = 1,           ! enable CORDEX diagnostics output
+! psl_diag                           = 3,           ! method to calculate sea level pressure
+! psmooth                            = 5,           ! number of smoothing passes for sea level pressure
+! ptarget                            = 70000.,      ! target pressure for vertical interpolation (Pa)
+! wsgs_diag                          = 1,           ! enable wind gust diagnostics
+! output_wb                          = 0,           ! disable water budget outputs
+! wsz100_diag                        = 1,           ! enable 100m wind diagnostics
+! z100m_wind                         = 100.,        ! height for wind diagnostics (meters)
+! zmlagen_dqv                        = 0.1,         ! moisture threshold for mixing layer height
+! zmlagen_dtheta                     = 1.5,         ! temperature threshold for mixing layer height
+! potevp_diag                        = 2,           ! method to calculate potential evaporation
+! convxtrm_diag                      = 1,           ! enable convective extremes diagnostics
+! fogvisibility_diag                 = 3,           ! method to calculate fog visibility
+! fogvars                            = 1,           ! enable fog variables output
+!/
+
+&physics
+ mp_physics                          = 8,           ! microphysics option; 8: Thompson scheme
+ ra_lw_physics                       = 4,           ! longwave radiation option; 4:RRTMG scheme
+ ra_sw_physics                       = 4,           ! shortwave radiation option; 4:RRTMG scheme
+ radt                                = 12,          ! time interval for radiation physics calls (in minutes)
+ swint_opt                           = 1,           ! interpolation of short-wave radiation based on the updated solar zenith angle between SW call; 1: use interpolation
+ o3input                             = 2,           ! ozone input option for radiation (RRTMG only); 2: CAM ozone data (ozone.formatted)
+ use_aero_icbc                       = .false.,     ! climatological aerosol input; use constant values (.false.) or climatological aerosol input from WPS (.true.)
+ aer_opt                             = 2,           ! aerosol input option for radiation (RRTMG only); MACv2-SP aerosol scheme (LUCAS FPS)
+ aer_aod550_opt                      = 2,           ! read AOD550 from auxinput15 (LUCAS FPS)
+ aer_angexp_opt                      = 3,           ! read Angstrom exponent from auxinput15 (LUCAS FPS)
+ aer_ssa_opt                         = 3,           ! read Single Scattering Albedo from auxinput15 (LUCAS FPS)
+ aer_asy_opt                         = 3,           ! read Asymmetry parameter from auxinput15 (LUCAS FPS)
+ aer_type                            = 1,           ! aerosol type; 1: rural
+ sf_sfclay_physics                   = 5,           ! surface-layer option; 5: MYNN surface layer
+ sf_surface_physics                  = 4,           ! land-surface option; 4: Noah-MP land-surface model (see additional &noah_mp)
+ sf_surface_mosaic                   = 0,           ! option to mosaic landuse categories for Noah LSM; 0: no mosaic approach
+ mosaic_cat                          = 3,           ! number of mosaic landuse categories in a grid cell
+ sf_urban_physics                    = 0,           ! activate urban canopy model; 0: not active
+ sf_lake_physics                     = 0,           ! activate lake model; 0: not active
+ bl_pbl_physics                      = 5,           ! boundary-layer option; 5: MYNN 2.5 level TKE PBL scheme
+ bldt                                = 0,           ! time interval between boundary-layer calls (in minutes, 0=every step)
+ grav_settling                       = 0,           ! gravitational settling of fog/cloud droplets; 0: no settling
+ bl_mynn_closure                     = 2.5,         ! MYNN closure parameter; 2.5: level 2.5
+ bl_mynn_cloudmix                    = 1,           ! mixing of qc and qi in MYNN; 1: mixing activated
+ bl_mynn_mixlength                   = 1,           ! mixing length formulation in MYNN; 1: RAP/HRRR (including BouLac in free atmosphere)
+ bl_mynn_cloudpdf                    = 2,           ! cloud PDFs to represent subgrid clouds; 2: Chaboureau and Bechtold 2002
+ bl_mynn_edmf                        = 1,           ! activate mass-flux option in MYNN; 1: activated (0 if shallow cumulus scheme is used)
+ bl_mynn_edmf_mom                    = 1,           ! activate momentum transport in MYNN; 1: activated (0 if shallow cumulus scheme is used)
+ bl_mynn_edmf_tke                    = 1,           ! activate TKE transport in MYNN; 1: activated (0 if shallow cumulus scheme is used)
+ scalar_pblmix                       = 1,           ! mix scalar fields consistent with PBL option
+ tracer_pblmix                       = 1,           ! mix tracer fields consistent with PBL option
+ cu_physics                          = 1,           ! cumulus option; 1: Kain-Fritsch (new Eta) scheme
+ shcu_physics                        = 0,           ! independent shallow cumulus option (not tied to deep convection); 0: no independent shallow cumulus
+ cu_rad_feedback                     = .true.,      ! enable cumulus radiation feedback
+ cudt                                = 0,           ! time interval between cumulus calls (in minutes, 0=every step)
+ isfflx                              = 1,           ! heat and moisture fluxes from the surface; 1: with fluxes from the surface
+ ifsnow                              = 1,           ! snow-cover effects; 1: with snow-cover effects
+ icloud                              = 1,           ! cloud effect to the optical depth in radiation; 1: with cloud effect, and use cloud fraction option 1 (Xu-Randall method)
+ icloud_bl                           = 1,           ! couple the subgrid-scale clouds from the PBL scheme to radiation; 1: activate coupling to radiation
+ surface_input_source                = 1,           ! where landuse and soil category data come from; 1: WPS/geogrid with dominant categories recomputed (LUCAS FPS)
+ num_soil_layers                     = 4,           ! number of soil layers; 4: Noah landsurface model
+ num_land_cat                        = 21,          ! number of land categories; 21: for MODIS if including lake category
+ maxiens                             = 1,           ! Grell-Devenyi only
+ maxens                              = 3,           ! Grell-Devenyi only
+ maxens2                             = 3,           ! Grell-Devenyi only
+ maxens3                             = 16,          ! Grell-Devenyi only
+ ensdim                              = 144,         ! Grell-Devenyi only
+ sst_update                          = 1,           ! time-varying sea-surface temperature; 1: yes, using data from auxinput4
+ usemonalb                           = .false.,     ! use monthly albedo map instead of table value (recommended for sst_update=1)
+ rdlai2d                             = .false.,     ! use LAI from input; false means using values from table
+ bucket_mm                           = 1000.0,      ! bucket reset value for water accumulations (in mm) - precipitation
+ bucket_J                            = 1.e9,        ! bucket reset value for energy accumulations (in J) - radiation
+ tmn_update                          = 1,           ! update deep soil temperature; 1: yes
+ sst_skin                            = 1,           ! calculate skin SST
+ slope_rad                           = 0,           ! slope effects for solar radiation; 0: off
+ topo_shading                        = 0,           ! neighboring-point shadow effects for solar radiation; 0: off
+ fractional_seaice                   = 0,           ! treat sea-ice as fractional field (1) or ice/no-ice flag (0)
+/
+
+&noah_mp
+ dveg                                = 3,           ! dynamic vegetation option; 3: Off (use table LAI; calculate FVEG) (LUCAS FPS)
+ opt_crs                             = 1,           ! stomatal resistance option; 1: Ball-Berry
+ opt_sfc                             = 1,           ! surface layer drag coefficient calculation; 1: Monin-Obukhov
+ opt_btr                             = 2,           ! soil moisture factor for stomatal resistance; 2: CLM
+ opt_run                             = 1,           ! surface runoff option; 1: TOPMODEL with groundwater
+ opt_frz                             = 1,           ! supercooled liquid water option; 1: no iteration
+ opt_inf                             = 2,           ! soil permeability option; 2: non-linear effects, less permeable
+ opt_rad                             = 3,           ! radiative transfer option; 3: two-stream applied to vegetated fraction
+ opt_alb                             = 2,           ! ground surface albedo option; 2: CLASS
+ opt_snf                             = 3,           ! precipitation partitioning between snow and rain; 3: snow when SFCTMP < TFRZ
+ opt_tbot                            = 2,           ! soil temperature lower boundary condition; 2: TBOT at 8 m from input file
+ opt_stc                             = 1,           ! snow/soil temperature time scheme; 1: semi-implicit
+ opt_gla                             = 1,           ! glacier treatment option; 1: includes phase change
+ opt_rsf                             = 1,           ! surface evaporation resistance option; 1: Sakaguchi and Zeng, 2009
+/
+
+&fdda
+/
+
+&dynamics
+ zdamp                               = 5000.,       ! damping depth (m) from model top
+ w_damping                           = 1,           ! vertical velocity damping; 1: with damping
+ diff_opt                            = 2,           ! turbulence and mixing option; 2: evaluates mixing terms in physical space
+ km_opt                              = 4,           ! eddy coefficient option; 4:horizontal Smagorinsky first order closure
+ damp_opt                            = 3,           ! upper level damping; 3: with w-Rayleigh damping
+ diff_6th_opt                        = 2,           ! 6th-order numerical diffusion; 2: 6th-order numerical diffusion but prohibit up-gradient diffusion
+ diff_6th_factor                     = 0.12,        ! 6th-order numerical diffusion non-dimensional rate
+ dampcoef                            = 0.2,         ! damping coefficient
+ base_temp                           = 290.,        ! real-data, em ONLY, base sea-level temperature for base state (K)
+ khdif                               = 0,           ! horizontal diffusion constant (m^2/s)
+ kvdif                               = 0,           ! vertical diffusion constant (m^2/s)
+ epssm                               = 0.3,         ! time off-centering for vertical sound waves
+ non_hydrostatic                     = .true.,      ! whether running the model in hydrostatic (.false.) or non-hydro (.true.) mode
+ moist_adv_opt                       = 1,           ! advection options for moisture; 1: original
+ scalar_adv_opt                      = 1,           ! advection options for scalar; 1: original
+/
+
+&bdy_control
+ spec_bdy_width                      = 10,          ! total number of rows for specified boundary value nudging
+ spec_zone                           = 1,           ! number of points in specified zone
+ relax_zone                          = 9,           ! number of points in relaxation zone
+ specified                           = .true.,      ! specified boundary conditions
+ spec_exp                            = 0.33,        ! exponential decay factor (~3*dx)
+ nested                              = .false.,     ! nested boundary conditions
+/
+
+&grib2
+/
+
+&namelist_quilt
+ nio_tasks_per_group                 = 4,           ! number of I/O tasks per group
+ nio_groups                          = 5,           ! number of I/O groups
+/
+
+&dfi_control
+/
+
+&scm
+/
+
+&tc
+/
+
+!&diags
+! p_lev_diags                         = 1,                                         ! vertically interpolate diagnostics to p-levels; 1: yes
+! num_press_levels                    = 6,                                         ! number of pressure levels to interpolate to
+! press_levels                        = 100000, 92500, 85000, 70000, 50000, 20000, ! which pressure levels (Pa) to interpolate to
+! use_tot_or_hyd_p                    = 1,                                         ! which half level pressure to use; 1: total (p+pb)
+! p_lev_missing                       = -999.,                                     ! missing value for pressure level diagnostics
+!/

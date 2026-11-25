@@ -1,0 +1,22 @@
+# Data files (download them from the sources listed in each README)
+*.nc
+*.nc4
+*.nc.gz
+*.grb
+*.grib
+
+# Auxiliary file of the geo_em workflow (kept in the repository)
+!pre-processing/geo_em/water_ice.nc
+
+# Compiled files (build them with the Makefile in pre-processing/geo_em)
+*.o
+*.mod
+pre-processing/geo_em/WRF_LUCAS_PFTs_v3_water_ice_landmask
+
+# Job logs
+*.log
+*.out
+*.err
+
+# ESGF credentials used by the wget scripts (never commit them)
+fuser*
