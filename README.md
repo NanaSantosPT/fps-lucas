@@ -1,7 +1,6 @@
-# FPS on the Land Use Change Across Scales (FPS-LUCAS) — WRF
+# FPS on the Land Use Change Across Scales (FPS-LUCAS) - WRF
 
-This repository collects the configuration and the pre-processing scripts used to run the
-WRF simulations of the CORDEX Flagship Pilot Study LUCAS, following the LUCAS protocol.
+This repository collects the configuration and the pre-processing scripts used to run the WRF simulations of the CORDEX Flagship Pilot Study LUCAS, following the LUCAS protocol.
 
 Questions, suggestions and corrections:
  * Luana C. Santos (lssantos@ciencias.ulisboa.pt)
@@ -29,10 +28,8 @@ util/               # Helper scripts (tavgsfc.py)
 ```
 
 ## How to use the pre-processing scripts
-Each folder in `pre-processing/` has a `launch-*.sh` (SLURM job: choose experiment, years, domain)
-and a `run-*.sh` (does the work for one case). Before running:
-1. Set the paths at the top of the `launch-*.sh` and `run-*.sh` scripts
-   (lines marked with `## <<<`).
+Each folder in `pre-processing/` has a `launch-*.sh` (SLURM job: choose experiment, years, domain) and a `run-*.sh` (does the work for one case). Before running:
+1. Set the paths at the top of the `launch-*.sh` and `run-*.sh` scripts (lines marked with `## <<<`).
 2. Download the input data listed in the README of each folder.
 
 ## Download only one folder
