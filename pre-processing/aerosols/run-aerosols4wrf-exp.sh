@@ -232,7 +232,6 @@ merge_yearly_files() {
  done
  ncrcat -O ${monthly_files_trimmed} "${file_merge}"
  ncks -O --mk_rec_dmn Time "${file_merge}" tmp.$$ && mv tmp.$$ "${file_merge}" || true
- delete_atts "${file_merge}"
  rm -f ${monthly_files_trimmed}
  mv "${file_merge}" "${output_dir}/."
 }
